@@ -1,0 +1,53 @@
+version: '3.4'
+
+services:
+  sensor-api:
+    image: sensors-api
+    container_name: sensor-api
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - sensor-worker
+      - sensor-db
+      - sensor-redis
+    networks:
+      - sensors-backend
+
+  sensor-worker:
+    image: sensor-worker
+    container_name: sensor-worker
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./WorkerDockerfile
+    depends_on:
+      - sensor-db
+      - sensor-redis
+    networks:
+      - sensors-backend
+
+  sensor-redis:
+    image: redis:alpine
+    restart: on-failure
+    container_name: sensor-redis
+    networks:
+      - sensors-backend
+    ports:
+      - "6379:6379"
+
+  sensor-db:
+    image: postgres:alpine
+    restart: on-failure
+    container_name: sensor-db
+    ports:
+      - "5432:5432"
+    networks:
+      - sensors-backend
+    environment:
+      - POSTGRES_PASSWORD=3Xzxi7zV0WiP
+
+networks:
+  sensors-backend:
+
