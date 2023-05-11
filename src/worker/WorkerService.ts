@@ -3,6 +3,7 @@ import { Job } from 'bull';
 import { Sensor } from '@prisma/client';
 import { RandomUtils } from '../utils/RandomUtils';
 import { PrismaService } from '../database/PrismaService';
+import { FishList } from '../enums/Fish';
 
 @Processor('generate-data')
 export class WorkerService {
@@ -19,16 +20,22 @@ export class WorkerService {
     const time = new Date();
     const temperature = +this.generateTemperature(sensor);
     const transparency = await this.generateTransparency(sensor, sensors);
+    const species = await this.generateSpecies();
 
-    console.log(`${time.toISOString()}: ${codename}(${sensor.x} ${sensor.y} ${sensor.z}), temp: ${temperature} C, transp: ${transparency}%`);
     await this.prisma.sensorData.create({
       data: {
         sensor: codename,
         time,
         transparency,
         temperature,
+        fish: {
+          create: species,
+        },
       },
-    })
+      include: {
+        fish: true,
+      },
+    });
   }
 
   generateTemperature (sensor: Sensor) {
@@ -38,9 +45,7 @@ export class WorkerService {
   async generateTransparency(sensor: Sensor, sensors: Sensor[]) {
     const filtered = sensors.filter((s) => s.codename !== sensor.codename);
     const { nearest, distance } = this.findNearest(sensor, filtered);
-    console.log(`Nearest for ${sensor.codename} is ${nearest.codename}: ${distance}m`);
     const data = await this.getLastData(nearest);
-    console.log(data);
     if (!data) {
       return RandomUtils.getIntIn(30, 70);
     } else {
@@ -92,5 +97,20 @@ export class WorkerService {
         fish: true,
       }
     });
+  }
+
+  async generateSpecies () {
+    const typesAmount = RandomUtils.getIntIn(2, 5);
+    const copy = FishList.slice();
+    const species = [];
+    for (let i = 0; i < typesAmount; i++) {
+      const index = RandomUtils.getIntIn(0, copy.length);
+
+      species.push({
+        name: copy.splice(index, 1)[0],
+        amount: RandomUtils.getIntIn(2, 10)
+      })
+    }
+    return species;
   }
 }
