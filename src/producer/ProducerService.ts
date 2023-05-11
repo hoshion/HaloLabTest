@@ -6,10 +6,10 @@ import { Greeks } from '../enums/GreekLetters';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { PrismaService } from '../database/PrismaService';
 
-const MIN_GROUPS = 3;
-const MAX_GROUPS = 7;
-const MIN_SENSORS = 3;
-const MAX_SENSORS = 7;
+const MIN_GROUPS = 4;
+const MAX_GROUPS = 8;
+const MIN_SENSORS = 4;
+const MAX_SENSORS = 8;
 
 @Injectable()
 export class ProducerService {
