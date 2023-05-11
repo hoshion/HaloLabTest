@@ -3,10 +3,11 @@ import { PrismaModule } from './database/PrismaModule';
 import { ProducerService } from './producer/ProducerService';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ApiModule } from './api/ApiModule';
 
 @Module({
   imports: [
-    PrismaModule, ScheduleModule.forRoot(),
+    PrismaModule, ApiModule, ScheduleModule.forRoot(),
     BullModule.forRoot({
       redis: {
         host: 'sensor-redis',
@@ -16,7 +17,6 @@ import { ScheduleModule } from '@nestjs/schedule';
       name: 'generate-data',
     })
   ],
-  controllers: [],
   providers: [ProducerService],
 })
 export class AppModule {}
