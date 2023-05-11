@@ -48,7 +48,7 @@ export class WorkerService {
       let result = RandomUtils.getIntIn(transparency - distance * 0.4, transparency + distance * 0.4);
       if (result < 0) {
         result += 20;
-      } else if (result < 100) {
+      } else if (result > 100) {
         result -= 20;
       }
       return result;
