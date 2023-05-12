@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/PrismaService';
 import { Fish, Sensor, SensorData } from '@prisma/client';
 import { SensorService } from './SensorService';
@@ -12,12 +12,22 @@ export class GroupService {
 
   async getAverageTransparency(name: string) {
     const sensorsData = await this.getLastGroupData(name);
-    return sensorsData.reduce((p, s) => p + s.transparency, 0) / sensorsData.length;
+
+    if (!sensorsData.length) {
+      throw new BadRequestException('No data in the group');
+    }
+
+    return this.sensorService.getAverageTransparency(sensorsData);
   }
 
   async getAverageTemperature(name: string) {
     const sensorsData = await this.getLastGroupData(name);
-    return sensorsData.reduce((p, s) => p + s.temperature, 0) / sensorsData.length;
+
+    if (!sensorsData.length) {
+      throw new BadRequestException('No data in the group');
+    }
+
+    return this.sensorService.getAverageTemperature(sensorsData);
   }
 
   async getLastSpecies(name: string): Promise<Fish[]> {

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/PrismaService';
 import { Fish, Sensor, SensorData } from '@prisma/client';
 import { Timeline } from '../dtos/Timeline';
 
-type SensorDataWithFish = SensorData & {
+export type SensorDataWithFish = SensorData & {
   fish: Fish[],
 }
 
@@ -35,11 +35,46 @@ export class SensorService {
     return data;
   }
 
-  async getAverageTemperature(sensor: string, timeline: Timeline) {
+  async getAverageTemperatureInTimeline(sensor: string, timeline: Timeline) {
     const data = await this.getDataInTimeline(sensor, timeline);
+
+    if (!data.length) {
+      throw new BadRequestException('No data in the group');
+    }
+
+    return this.getAverageTemperature(data);
+  }
+
+  getAverageTemperature(data: SensorDataWithFish[]): number {
+    if (!data || !data.length) return 0;
+
     return data
       .map((d) => d.temperature)
       .reduce((prev, cur) => prev + cur, 0) / data.length;
+  }
+
+  getAverageTransparency(data: SensorDataWithFish[]) {
+    if (!data || !data.length) return 0;
+
+    return data
+      .map((d) => d.transparency)
+      .reduce((prev, cur) => prev + cur, 0) / data.length;
+  }
+
+  getMaxTemperature(data: SensorDataWithFish[]) {
+    if (!data || !data.length) return 0;
+
+    return data
+      .map((d) => d.temperature)
+      .reduce((prev, cur) => prev > cur ? prev : cur);
+  }
+
+  getMinTemperature(data: SensorDataWithFish[]) {
+    if (!data || !data.length) return 0;
+
+    return data
+      .map((d) => d.temperature)
+      .reduce((prev, cur) => prev < cur ? prev : cur);
   }
 
   async getDataInTimeline(sensor: string, timeline: Timeline): Promise<SensorDataWithFish[]> {

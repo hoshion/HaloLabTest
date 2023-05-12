@@ -14,24 +14,20 @@ export class RegionService {
     const data = await this.getLastRegionData(region);
 
     if (!data.length) {
-      throw new BadRequestException('No sensors in the region');
+      throw new BadRequestException('No data in the region');
     }
 
-    return data
-      .map((d) => d.temperature)
-      .reduce((prev, cur) => prev > cur ? prev : cur);
+    return this.sensorService.getMaxTemperature(data);
   }
 
   async getMinTemperature(region: Region) {
     const data = await this.getLastRegionData(region);
 
     if (!data.length) {
-      throw new BadRequestException('No sensors in the region');
+      throw new BadRequestException('No data in the region');
     }
 
-    return data
-      .map((d) => d.temperature)
-      .reduce((prev, cur) => prev < cur ? prev : cur);
+    return this.sensorService.getMinTemperature(data);
   }
 
   async getLastRegionData(region: Region) {

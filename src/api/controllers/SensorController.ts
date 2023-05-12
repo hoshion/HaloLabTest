@@ -15,6 +15,6 @@ export class SensorController {
     @Param('codeName') sensor: string,
     @Query() timeline: Timeline,
   ) {
-    return this.sensorService.getAverageTemperature(sensor, timeline);
+    return this.sensorService.getAverageTemperatureInTimeline(sensor, timeline);
   }
 }
