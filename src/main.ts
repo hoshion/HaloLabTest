@@ -15,7 +15,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Sensors')
     .setDescription('The sensors API description')
-    .addTag('cats')
+    .addTag('sensors')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
