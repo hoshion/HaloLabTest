@@ -1,6 +1,6 @@
 import { PrismaService } from '../../database/PrismaService';
 import { SensorDataWithFish, SensorService } from './SensorService';
-import { Timeline } from '../dtos/Timeline';
+import { Timeline } from '../dtos/Timeline.dto';
 
 describe('SensorService', () => {
   let prisma: PrismaService;

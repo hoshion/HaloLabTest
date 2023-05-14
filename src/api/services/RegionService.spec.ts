@@ -1,7 +1,7 @@
 import { PrismaService } from '../../database/PrismaService';
 import { SensorDataWithFish, SensorService } from './SensorService';
 import { RegionService } from './RegionService';
-import { Region } from '../dtos/Region';
+import { Region } from '../dtos/Region.dto';
 
 describe('RegionService',() => {
   let prisma: PrismaService;

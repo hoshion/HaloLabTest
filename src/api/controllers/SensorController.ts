@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { SensorService } from '../services/SensorService';
-import { Timeline } from '../dtos/Timeline';
+import { Timeline } from '../dtos/Timeline.dto';
 
 @Controller({
   path: 'sensor',

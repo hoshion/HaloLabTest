@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/PrismaService';
 import { Fish, Sensor, SensorData } from '@prisma/client';
-import { Timeline } from '../dtos/Timeline';
+import { Timeline } from '../dtos/Timeline.dto';
 
 export type SensorDataWithFish = SensorData & {
   fish: Fish[],

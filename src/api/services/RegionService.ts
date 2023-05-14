@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/PrismaService';
-import { Region } from '../dtos/Region';
+import { Region } from '../dtos/Region.dto';
 import { SensorService } from './SensorService';
 
 @Injectable()
