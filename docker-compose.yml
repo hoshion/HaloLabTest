@@ -16,6 +16,8 @@ services:
       - sensor-redis
     networks:
       - sensors-backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:3Xzxi7zV0WiP@sensor-db:5432/postgres?schema=public
 
   sensor-worker:
     image: sensor-worker
@@ -29,6 +31,8 @@ services:
       - sensor-redis
     networks:
       - sensors-backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:3Xzxi7zV0WiP@sensor-db:5432/postgres?schema=public
 
   sensor-redis:
     image: redis:alpine
